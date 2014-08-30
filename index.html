@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
+<html lang="fi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Amicaruokis</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+
         <link rel="stylesheet" href="css/styles.css">
         <!-- Load the script "js/main.js" as our entry point -->
-        <script data-main="js/main" src="js/lib/require.js"></script>
+        <script data-main="js/main" src="js/libs/require.js"></script>
+        <style type="text/css">
+            .day {
+                cursor: pointer;
+            }
+        </style>
     </head>
 	<body>
         <div id="header">
@@ -17,7 +26,38 @@
         </div>
         
         <div class="content">
-            <div class="menus"></div>
+            <div class="row">
+                <div class="col-sm-1 dropdown language">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                      fi
+                      <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">fi</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">en</a></li>
+                  </ul>
+                </div>
+                
+                <div class='col-sm-2'>
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" data-date-format="YYYY-MM-DD" />
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class='col-sm-2'>
+                    <div class='input-group date' id='datetimepicker2'>
+                        <input type='text' class="form-control" data-date-format="YYYY-MM-DD" />
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-default getMenu">Hae</button>
+            </div>
+
+            <div class="row">
+                <div class="menus"></div>
+            </div>
         </div>
         
         <script type="text/template" id="tpl-day">
@@ -33,6 +73,6 @@
             <% } %>
             </ul>
         </script>
-        
+            
 	</body>
 </html>

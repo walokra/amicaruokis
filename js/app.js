@@ -3,17 +3,58 @@ define([
     'underscore',
     'backbone',
     'json2',
-    'moment'
+    'moment',
+    'bootstrap',
+    'datetimepicker'
 ], function($, _, Backbone, JSON, moment){
-    // http://www.amica.fi/modules/json/json/Index?costNumber=3238&firstDay=2014-08-18&lastDay=2014-08-24&language=fi
-    var amica_endpoint = 'http://www.amica.fi/modules/json/json/Index?';
-    var costNumber='3238';
-    var firstDay=getMonday();
-    var lastDay=getSunday();
-    var language='fi';
+    $('#datetimepicker1').datetimepicker({
+        language: 'fi',
+        defaultDate: getMonday(),
+    });
+    $('#datetimepicker2').datetimepicker({
+        language: 'fi',
+        defaultDate: getSunday(),
+    });
     
-    var amica_endpoint = amica_endpoint + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
-
+    $('.dropdown-toggle').dropdown();
+    $(".dropdown-menu li a").click(function(){
+        $(".btn:first-child").text($(this).text());
+        $(".btn:first-child").val($(this).text());
+    });
+    $(".dropdown-menu li a").click(function(){
+        var selText = $(this).text();
+        //console.log("selText=" + selText);
+        language = selText;
+        amica_endpoint = amica_endpoint_root + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
+        getMenu();
+    });
+    
+    // http://www.amica.fi/modules/json/json/Index?costNumber=3238&firstDay=2014-08-18&lastDay=2014-08-24&language=fi
+    
+    // http://www.amica.fi/api/restaurant/menu/week?language=fi&restaurantPageId=3238&weekDate=2014-8-30
+    // joku muu, http://www.amica.fi/api/restaurant/menu/week?language=fi&restaurantPageId=7303&weekDate=2014-8-30
+    var amica_endpoint_root = 'http://www.amica.fi/modules/json/json/Index?';
+    var costNumber='3238';
+    var firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    var lastDay=moment($('#datetimepicker2').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    var language='fi';
+    var amica_endpoint = amica_endpoint_root + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
+    
+    $("#datetimepicker1").on("dp.change",function (e) {
+       $('#datetimepicker2').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#datetimepicker2").on("dp.change",function (e) {
+       $('#datetimepicker1').data("DateTimePicker").setMaxDate(e.date);
+    });
+    
+    $('.getMenu').click(function() {
+        firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+        lastDay=moment($('#datetimepicker2').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+        // TODO:
+        // Rajapinta ei tarjoa historiaa ruokalistoista.
+        // Tallenna viikottaiset ruokalistat tietokantaan ja hae vanhemmat listat sieltä
+    });
+    
     function getMonday() {
         var d = moment().startOf('isoWeek').format("YYYY-MM-DD");
         return d;
@@ -228,36 +269,40 @@ define([
         showWeekMenu : function() {
             //console.log("showWeekMenu");
             // Instantiating 
-            this.weekMenuCollection = new WeekMenuCollection();
-            this.weekMenuCollection.url = amica_endpoint;
-            var self = this;
-
-            this.weekMenuCollection.fetch({
-                success: function(response, xhr) {
-                    //console.log("success=" + xhr.status);
-                    //console.log("response=" + JSON.stringify(response)); // data element only
-                    //console.log("xhr=" + JSON.stringify(xhr)); // full response
-                    self.weekMenuView = new WeekMenuView({
-                        model:self.weekMenuCollection
-                    });
-                    $('.menus', this.el).html(self.weekMenuView.render().el);
-
-                    // toggle shown week day's menu
-                    var weekDayClass = '.'+new Date().getDayName();
-                    $('.day').find('.items').hide();
-                    $(weekDayClass).find('.items').show();
-                },
-                error: function(response, xhr) {
-                    console.log("xhr=" + JSON.stringify(xhr));
-                    $('div', this.el).append(response);
-                }
-            });
+            getMenu();
         }
     });
 
     var initialize = function(){
         var router = new Router();
         Backbone.history.start();
+    }
+    
+    function getMenu() {
+        this.weekMenuCollection = new WeekMenuCollection();
+        this.weekMenuCollection.url = amica_endpoint;
+        var self = this;
+
+        this.weekMenuCollection.fetch({
+            success: function(response, xhr) {
+                //console.log("success=" + xhr.status);
+                //console.log("response=" + JSON.stringify(response)); // data element only
+                //console.log("xhr=" + JSON.stringify(xhr)); // full response
+                self.weekMenuView = new WeekMenuView({
+                    model:self.weekMenuCollection
+                });
+                $('.menus', this.el).html(self.weekMenuView.render().el);
+
+                // toggle shown week day's menu
+                var weekDayClass = '.'+new Date().getDayName();
+                $('.day').find('.items').hide();
+                $(weekDayClass).find('.items').show();
+            },
+            error: function(response, xhr) {
+                console.log("xhr=" + JSON.stringify(xhr));
+                $('div', this.el).append(response);
+            }
+        });
     }
     
     return {

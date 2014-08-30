@@ -2,11 +2,18 @@
 // There usage will become more apparent further along in the tutorial.
 require.config({
     paths: {
-        jquery: 'lib/jquery-2.0.3.min',
-        underscore: 'lib/underscore-1.6.0-min',
-        backbone: 'lib/backbone-1.1.2-min',
-        json2: 'lib/json2',
-        moment: 'lib/moment.min'
+        jquery: 'libs/jquery.min',
+        underscore: 'libs/underscore-min',
+        backbone: 'libs/backbone',
+        json2: 'libs/json2',
+        moment: 'libs/moment.min',
+        bootstrap: 'libs/bootstrap.min',
+        datetimepicker: 'libs/bootstrap-datetimepicker.min'
+    },
+    shim: {
+        'bootstrap': {
+            deps: ['jquery', 'underscore']
+        }
     }
 });
 

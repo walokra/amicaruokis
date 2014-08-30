@@ -1,0 +1,14 @@
+{
+    "name": "Amicaruokis",
+    "version": "0.1.0",
+    "dependencies": {
+        "jquery": "2.0.3",
+        "backbone": null,
+        "underscore": null,
+        "requirejs": "2.1.14",
+        "moment": "2.8.1",
+        "bootstrap": "3.2.0",
+        "eonasdan-bootstrap-datetimepicker": null,
+        "json2": null
+    }
+}
