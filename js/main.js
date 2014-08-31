@@ -6,7 +6,7 @@ require.config({
         underscore: 'libs/underscore-min',
         backbone: 'libs/backbone',
         json2: 'libs/json2',
-        moment: 'libs/moment.min',
+        moment: 'libs/moment-with-locales.min',
         bootstrap: 'libs/bootstrap.min',
         datetimepicker: 'libs/bootstrap-datetimepicker.min'
     },

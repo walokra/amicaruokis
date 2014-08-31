@@ -17,3 +17,9 @@ h1 {
 .title {
      display: block; width: 100%; background-color: #eee;
 }
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}

@@ -21,32 +21,29 @@
         </style>
     </head>
 	<body>
-        <div id="header">
-            <h1 class="title"><a href="index.html">Amicaruokis - Piikeidas</a></h1>
+        <div class="header">
+
         </div>
         
         <div class="content">
             <div class="row">
+                
+                <div class="col-sm-1 dropdown restaurants">
+                    <button class="restaurant-btn btn btn-default dropdown-toggle" type="button" id="dropdownMenuRestaurants" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="restaurant-dropdown-menu dropdown-menu json-menu scrollable-menu"></ul>
+                </div>
+                
                 <div class="col-sm-1 dropdown language">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                      fi
+                  <button class="language-btn btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
                       <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">fi</a></li>
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">en</a></li>
-                  </ul>
+                  <ul class="language-dropdown-menu dropdown-menu json-lang-menu"></ul>
                 </div>
                 
                 <div class='col-sm-2'>
                     <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' class="form-control" data-date-format="YYYY-MM-DD" />
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
-                <div class='col-sm-2'>
-                    <div class='input-group date' id='datetimepicker2'>
                         <input type='text' class="form-control" data-date-format="YYYY-MM-DD" />
                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -60,16 +57,22 @@
             </div>
         </div>
         
+        <script type="text/template" id="tpl-header">
+            <h1 class="title"><a href="index.html">Amicaruokis - <%= ShortTitle %></%></a></h1>
+            <h4><%= StreetAddress %>, <%= PostalCode %> <%= City %></h4>
+        </script>
+        
         <script type="text/template" id="tpl-day">
             <h3 class="title"><%= weekDay %> (<%= date %>)</h3>
         </script>
             
         <!-- Templates -->            
         <script type="text/template" id="tpl-menus">
+            <%= Name %>
             <ul>
-            <% for(var item in Components) { %>
-                <% //console.log(Components[item]); %>
-                <li><%= Components[item] %></li>
+            <% for(var item in Meals) { %>
+                <% //console.log(Meals[item]); %>
+                <li><%= Meals[item].Name %>, <%= Meals[item].Diets %></li>
             <% } %>
             </ul>
         </script>

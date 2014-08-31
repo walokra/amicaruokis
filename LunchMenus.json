@@ -1,0 +1,786 @@
+{
+  "WeekNumber": 35,
+  "LunchMenus": [
+    {
+      "DayOfWeek": "Maanantai",
+      "Date": "25.8.",
+      "SetMenus": [
+        {
+          "Name": "Buffet lounas 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Chili con carnea",
+              "RecipeId": 3298,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*",
+                "VS"
+              ]
+            },
+            {
+              "Name": "Höyrytettyä riisiä",
+              "RecipeId": 25,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Paistettua seitifileetä",
+              "RecipeId": 1397,
+              "Diets": [
+                "L",
+                "M"
+              ]
+            },
+            {
+              "Name": "Keitettyjä tilliperunoita",
+              "RecipeId": 67,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Tartarkastiketta",
+              "RecipeId": 199,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Kasviksia inkiväärikastikkeessa",
+              "RecipeId": 7893,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*",
+                "Veg",
+                "VS"
+              ]
+            },
+            {
+              "Name": "Porsaanliha-kasviskeittoa",
+              "RecipeId": 7113,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "VS"
+              ]
+            },
+            {
+              "Name": "Marjarahkaa",
+              "RecipeId": 798,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "Fresh Buffet 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Paahdettu broilerinfilee",
+              "RecipeId": 152,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Savustettua siikaa",
+              "RecipeId": -1,
+              "Diets": []
+            },
+            {
+              "Name": "Fetajuustoa",
+              "RecipeId": -1,
+              "Diets": [
+                "G",
+                "VL"
+              ]
+            },
+            {
+              "Name": "Täyteläistä porkkanasosekeittoa",
+              "RecipeId": 7747,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Melonilassi",
+              "RecipeId": 1038,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            }
+          ]
+        }
+      ],
+      "Html": ""
+    },
+    {
+      "DayOfWeek": "Tiistai",
+      "Date": "26.8.",
+      "SetMenus": [
+        {
+          "Name": "Buffet lounas 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Turskan seläkettä inkivääri-soijakastikkeessa",
+              "RecipeId": 10695,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "VS",
+                "A"
+              ]
+            },
+            {
+              "Name": "Rosmariiniöljyssä pariloitua broileria",
+              "RecipeId": 11591,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Villiriisiä",
+              "RecipeId": 86,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Punaviinikastiketta",
+              "RecipeId": 8853,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Lihakeittoa",
+              "RecipeId": 691,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*",
+                "A"
+              ]
+            },
+            {
+              "Name": "Feta-pinaattipihvejä",
+              "RecipeId": 10943,
+              "Diets": [
+                "VL"
+              ]
+            },
+            {
+              "Name": "Sitruuna-jogurttikastiketta",
+              "RecipeId": 156,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Keitettyjä perunoita",
+              "RecipeId": 30,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Mangosmoothie",
+              "RecipeId": 926,
+              "Diets": [
+                "L",
+                "G",
+                "A"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "Fresh Buffet 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Kylmäsavukinkkua",
+              "RecipeId": -1,
+              "Diets": [
+                "G",
+                "L",
+                "M"
+              ]
+            },
+            {
+              "Name": "Marinoitua turskaa",
+              "RecipeId": 9865,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "VS"
+              ]
+            },
+            {
+              "Name": "Kotijuustoa",
+              "RecipeId": 8322,
+              "Diets": [
+                "G",
+                "VL"
+              ]
+            },
+            {
+              "Name": "Herkkusienikeittoa",
+              "RecipeId": 7882,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Mandariini-inkiväärijuoma",
+              "RecipeId": 3634,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            }
+          ]
+        }
+      ],
+      "Html": ""
+    },
+    {
+      "DayOfWeek": "Keskiviikko",
+      "Date": "27.8.",
+      "SetMenus": [
+        {
+          "Name": "Buffet lounas 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Jauhelihapyöryköitä",
+              "RecipeId": 11226,
+              "Diets": [
+                "L",
+                "M"
+              ]
+            },
+            {
+              "Name": "Pippurikastiketta",
+              "RecipeId": 3503,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Keitettyjä perunoita",
+              "RecipeId": 30,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Uunikirjolohta",
+              "RecipeId": 1403,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Tilli-kermaviilikastiketta",
+              "RecipeId": 112,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Kasvis-vehnärisottoa ja luomutofua",
+              "RecipeId": 4962,
+              "Diets": [
+                "L",
+                "M",
+                "*",
+                "Veg"
+              ]
+            },
+            {
+              "Name": "Nakkikeittoa",
+              "RecipeId": 1563,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "A"
+              ]
+            },
+            {
+              "Name": "Raparperikiisseliä",
+              "RecipeId": 952,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Vaniljakermavaahtoa",
+              "RecipeId": 1589,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "Fresh Buffet 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Pippurista kalkkunan sisäfileetä",
+              "RecipeId": 8932,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Kookosmarinoituja katkarapuja",
+              "RecipeId": 4638,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "A"
+              ]
+            },
+            {
+              "Name": "Vuohenjuustoa",
+              "RecipeId": -1,
+              "Diets": [
+                "G",
+                "VL"
+              ]
+            },
+            {
+              "Name": "Linssisosekeittoa",
+              "RecipeId": 8309,
+              "Diets": [
+                "L",
+                "G",
+                "VS"
+              ]
+            },
+            {
+              "Name": "Mustikkajuoma",
+              "RecipeId": 1034,
+              "Diets": []
+            }
+          ]
+        }
+      ],
+      "Html": ""
+    },
+    {
+      "DayOfWeek": "Torstai",
+      "Date": "28.8.",
+      "SetMenus": [
+        {
+          "Name": "Buffet lounas 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Porsasta tomaatti-yrttikastikkeessa",
+              "RecipeId": 9151,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "VS"
+              ]
+            },
+            {
+              "Name": "Keitettyjä perunoita",
+              "RecipeId": 30,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Kalamurekepihvejä",
+              "RecipeId": 662,
+              "Diets": [
+                "L",
+                "M",
+                "A"
+              ]
+            },
+            {
+              "Name": "Kananmunakastiketta",
+              "RecipeId": 9006,
+              "Diets": [
+                "VL"
+              ]
+            },
+            {
+              "Name": "Espanjalaista kasvis-herkkusienimunakasta",
+              "RecipeId": 8727,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Paprikahilloa",
+              "RecipeId": 43,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Kermaista lohikeittoa",
+              "RecipeId": 10149,
+              "Diets": [
+                "G",
+                "VL",
+                "A"
+              ]
+            },
+            {
+              "Name": "Pappilan hätävaraa",
+              "RecipeId": 1608,
+              "Diets": [
+                "L"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "Fresh Buffet 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Hiillostettua lohta",
+              "RecipeId": 4263,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Naudan paahtopaistia",
+              "RecipeId": -1,
+              "Diets": []
+            },
+            {
+              "Name": "Mozzarellajuustoa",
+              "RecipeId": -1,
+              "Diets": [
+                "G"
+              ]
+            },
+            {
+              "Name": "Pinaattikeittoa ja kananmunaa",
+              "RecipeId": 1511,
+              "Diets": []
+            },
+            {
+              "Name": "Mansikka-basilikajuoma",
+              "RecipeId": 3633,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            }
+          ]
+        }
+      ],
+      "Html": ""
+    },
+    {
+      "DayOfWeek": "Perjantai",
+      "Date": "29.8.",
+      "SetMenus": [
+        {
+          "Name": "Buffet lounas 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "Kalkkunaa rakuunakastikkeessa",
+              "RecipeId": 4946,
+              "Diets": [
+                "L",
+                "G",
+                "*"
+              ]
+            },
+            {
+              "Name": "Luomutäysjyväkierrepastaa",
+              "RecipeId": 1032,
+              "Diets": [
+                "L",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Juustoraastetta",
+              "RecipeId": 850,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Porsaan grillipihvi",
+              "RecipeId": 31,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Chilivoita",
+              "RecipeId": 194,
+              "Diets": [
+                "G",
+                "VL"
+              ]
+            },
+            {
+              "Name": "Maalaislohkoperunoita",
+              "RecipeId": 1162,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Täyteläistä hernesosekeittoa",
+              "RecipeId": 7825,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Kasviskaalikääryleitä",
+              "RecipeId": 9309,
+              "Diets": [
+                "L",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Keitettyjä perunoita",
+              "RecipeId": 30,
+              "Diets": [
+                "L",
+                "G",
+                "M",
+                "*"
+              ]
+            },
+            {
+              "Name": "Puolukkahilloa",
+              "RecipeId": 76,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Pannukakkua",
+              "RecipeId": 7078,
+              "Diets": []
+            },
+            {
+              "Name": "Mansikkahilloa",
+              "RecipeId": 1171,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Vaniljakermavaahtoa",
+              "RecipeId": 1589,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "Fresh Buffet 9,90",
+          "Price": null,
+          "Meals": [
+            {
+              "Name": "BBQ broileria",
+              "RecipeId": 11621,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            },
+            {
+              "Name": "Savustettua järvikalaa",
+              "RecipeId": -1,
+              "Diets": []
+            },
+            {
+              "Name": "Sinihomejuustoa",
+              "RecipeId": -1,
+              "Diets": [
+                "G"
+              ]
+            },
+            {
+              "Name": "Täyteläistä hernesosekeittoa",
+              "RecipeId": 7825,
+              "Diets": [
+                "L",
+                "G"
+              ]
+            },
+            {
+              "Name": "Mustaherukkanektari",
+              "RecipeId": 1039,
+              "Diets": [
+                "L",
+                "G",
+                "M"
+              ]
+            }
+          ]
+        }
+      ],
+      "Html": ""
+    },
+    {
+      "DayOfWeek": "Lauantai",
+      "Date": "30.8.",
+      "SetMenus": [],
+      "Html": ""
+    },
+    {
+      "DayOfWeek": "Sunnuntai",
+      "Date": "31.8.",
+      "SetMenus": [],
+      "Html": ""
+    }
+  ],
+  "RequireDietFilters": [
+    {
+      "Name": "GlutenFree",
+      "TranslatedName": "Gluteeniton",
+      "Diet": "G",
+      "Selected": false
+    },
+    {
+      "Name": "LactoseFree",
+      "TranslatedName": "Laktoositon",
+      "Diet": "L",
+      "Selected": false
+    },
+    {
+      "Name": "LowLactose",
+      "TranslatedName": "Vähälaktoosinen",
+      "Diet": "VL",
+      "Selected": false
+    },
+    {
+      "Name": "NoMilk",
+      "TranslatedName": "Maidoton",
+      "Diet": "M",
+      "Selected": false
+    },
+    {
+      "Name": "Healthy",
+      "TranslatedName": "Voi hyvin",
+      "Diet": "*",
+      "Selected": false
+    },
+    {
+      "Name": "Vegetarian",
+      "TranslatedName": "Soveltuu vegaaniruokavalioon",
+      "Diet": "Veg",
+      "Selected": false
+    }
+  ],
+  "ExcludeDietFilters": [
+    {
+      "Name": "Garlic",
+      "TranslatedName": "Sis. tuoretta valkosipulia",
+      "Diet": "VS",
+      "Selected": false
+    },
+    {
+      "Name": "Allergens",
+      "TranslatedName": "Sis. allergeeneja",
+      "Diet": "A",
+      "Selected": false
+    }
+  ],
+  "RestaurantDietFilters": [],
+  "LastWeekMenuStartDate": null,
+  "NextWeekMenuStartDate": "2014-9-1",
+  "ProductDataSheetUrl": null
+}

@@ -2,66 +2,181 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'json2',
     'moment',
     'bootstrap',
-    'datetimepicker'
-], function($, _, Backbone, JSON, moment){
+    'datetimepicker',
+    'json2'
+], function($, _, Backbone, moment){
     $('#datetimepicker1').datetimepicker({
         language: 'fi',
         defaultDate: getMonday(),
     });
-    $('#datetimepicker2').datetimepicker({
-        language: 'fi',
-        defaultDate: getSunday(),
-    });
     
     $('.dropdown-toggle').dropdown();
-    $(".dropdown-menu li a").click(function(){
-        $(".btn:first-child").text($(this).text());
-        $(".btn:first-child").val($(this).text());
+    
+    // Using finnish locale
+    moment.locale("fi");
+    
+    /* Enable when storing week menus to localstorage
+    var weekNumber = localStorage.getItem("weekNumber");
+    var currWeekNumber = moment().format("w");
+    //console.log("moment.w=" + moment().format("w"));
+    if (weekNumber) {
+        // If current week is different than what stored
+        // Reset the stored data so we fetch current data
+        if (weekNumber !== currWeekNumber) {
+            localStorage.clear();
+        }
+    } else {
+        localStorage.setItem("weekNumber", currWeekNumber);
+    }
+    */
+    
+    //localStorage.clear();
+    
+    //var amica_endpoint_root = 'http://www.amica.fi/modules/json/json/Index?';
+    //var costNumber='3238';
+    //var firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    //var lastDay=moment($('#datetimepicker2').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    //var amica_endpoint = amica_endpoint_root + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
+    // http://www.amica.fi/api/restaurant/menu/week?language=fi&restaurantPageId=7303&weekDate=2014-8-30
+    var amica_endpoint_root = 'http://www.amica.fi/api/restaurant/menu/week?';
+    var restaurantPageId = localStorage.getItem("restaurantPageId");
+    if (!restaurantPageId) {
+        restaurantPageId = "7256";
+    }
+    var restaurant = localStorage.getItem("restaurant");
+    if (!restaurant) {
+        restaurant = "Itämeri";
+    }
+    /*
+    var template = _.template($('#tpl-header').html(), {restaurant: "restaurant"});
+    $('.header').html(template);
+    */
+    
+    var Restaurant = Backbone.Model.extend({
+        defaults: {
+            PageLinkId: "7256",
+            ShortTitle: 'Itämeri',
+            StreetAddress: "Itämerenkatu 3",
+            City: "Helsinki",
+            PostalCode: "00180"
+            // MainText
+            // Url
+        }
     });
-    $(".dropdown-menu li a").click(function(){
-        var selText = $(this).text();
-        //console.log("selText=" + selText);
-        language = selText;
-        amica_endpoint = amica_endpoint_root + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
-        getMenu();
+    
+    var RestaurantView = Backbone.View.extend({
+        el: '.header',
+
+        initialize:function(){
+            this.render();
+        },
+        template:_.template($('#tpl-header').html()),
+        
+        render: function () {
+            this.$el.html(this.template(this.model.toJSON()));
+        }
     });
+    var restaurant = new Restaurant;
+    var restaurantView = new RestaurantView({ model: restaurant });
+    
+    var weekDate = firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    var language = localStorage.getItem("language");
+    if (!language) {
+        language = "fi";
+    }
+    var amica_endpoint = createAmicaEndpoint();
+    
+    // Build lang dropdown
+    var builddata = function () {
+        var items = [];
+        items[0] = { label: "fi", id: "fi" };
+        items[1] = { label: "en", id: "en" };
+        return items;
+    }
+
+    var buildUL = function (parent, items) {
+        $.each(items, function () {
+            var li = $("<li class='js-menu'>" + "<a href='#restaurant/"+ restaurantPageId + "/"+ this.id + "'>" + this.label + "</a></li>");
+            li.appendTo(parent);
+        });
+    }
+
+    var source = builddata();
+    var ul = $(".json-lang-menu");
+    ul.appendTo(".json-lang-menu");
+    buildUL(ul, source);
+    //add bootstrap classes
+    if ($(".json-lang-menu>li:has(ul.js-menu)")) {
+        $(".language-btn:first-child").text(language);
+        $(".language-btn:first-child").val(language);
+    }
+    // Language menu
+    
+    // Get list of restaurants from Amica API
+    var amica_restaurant_endpoint = "http://www.amica.fi/api/search/FindSearchResults/" + language + "?page=1&pageSize=200&query=&tagId=4527,4287"
+    var restaurantsPromise = getRestaurants();
+    
+    restaurantsPromise.done(function(found, data){
+        if (!found) {
+            localStorage.setItem("restaurants", JSON.stringify(data));
+            console.log("Fetching restaurants from Amica, found " + data.length)
+        }
+        restaurants = data;
+                    
+        //console.log("response=" + JSON.stringify(response));
+        
+        var builddata = function () {
+            var items = [];
+            for (i = 0; i < restaurants.length; i++) {
+                var item = restaurants[i];
+                var ShortTitle = item["ShortTitle"];
+                var PageLinkId = item["PageLinkId"];
+                items[i] = { label: ShortTitle, id: PageLinkId };
+            }
+            return items;
+        }
+
+        var buildUL = function (parent, items) {
+            $.each(items, function () {
+                var li = $("<li class='js-menu'>" + "<a href='#restaurant/"+ this.id +"'>" + this.label + "</a></li>");
+                li.appendTo(parent);
+            });
+        }
+
+        var source = builddata();
+        var ul = $(".json-menu");
+        ul.appendTo(".json-menu");
+        buildUL(ul, source);
+        //add bootstrap classes
+        if ($(".json-menu>li:has(ul.js-menu)")) {
+            $(".restaurant-btn:first-child").text(restaurants[0].ShortTitle);
+            $(".restaurant-btn:first-child").val(restaurants[0].ShortTitle);
+        }
+    });
+
+    restaurantsPromise.fail(function(status, error){
+        console.log("status=" + status + "; error=" + error);
+    });
+    
+    function createAmicaEndpoint() {
+        return amica_endpoint_root + 'restaurantPageId=' + restaurantPageId + '&weekDate=' + weekDate + '&language=' + language;
+    }
     
     // http://www.amica.fi/modules/json/json/Index?costNumber=3238&firstDay=2014-08-18&lastDay=2014-08-24&language=fi
     
-    // http://www.amica.fi/api/restaurant/menu/week?language=fi&restaurantPageId=3238&weekDate=2014-8-30
-    // joku muu, http://www.amica.fi/api/restaurant/menu/week?language=fi&restaurantPageId=7303&weekDate=2014-8-30
-    var amica_endpoint_root = 'http://www.amica.fi/modules/json/json/Index?';
-    var costNumber='3238';
-    var firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
-    var lastDay=moment($('#datetimepicker2').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
-    var language='fi';
-    var amica_endpoint = amica_endpoint_root + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
-    
-    $("#datetimepicker1").on("dp.change",function (e) {
-       $('#datetimepicker2').data("DateTimePicker").setMinDate(e.date);
-    });
-    $("#datetimepicker2").on("dp.change",function (e) {
-       $('#datetimepicker1').data("DateTimePicker").setMaxDate(e.date);
-    });
-    
+    // Action for getting menu for given time period
     $('.getMenu').click(function() {
-        firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
-        lastDay=moment($('#datetimepicker2').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+        weekDate=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
         // TODO:
         // Rajapinta ei tarjoa historiaa ruokalistoista.
         // Tallenna viikottaiset ruokalistat tietokantaan ja hae vanhemmat listat sieltä
+        amica_endpoint = createAmicaEndpoint();
     });
     
     function getMonday() {
         var d = moment().startOf('isoWeek').format("YYYY-MM-DD");
-        return d;
-    }
-
-    function getSunday() {
-        var d = moment().endOf('isoWeek').format("YYYY-MM-DD");
         return d;
     }
 
@@ -72,77 +187,6 @@ define([
         };
     })();
 
-    /*
-    {
-      "RestaurantName": "Piikeidas",
-      "RestaurantUrl": "http://www.amica.fi/ravintolat/ei-avoimet-ravintolat/piikeidas/",
-      "PriceHeader": null,
-      "Footer": "Hyvät asiakkaat!\n\nRavintola piikeidas on avoinna ajalla 23.6-8.8.14, ma-pe klo 7.30-14.30.\n\nLounas on tarjolla klo 10.30-13.00.\n\nGrilli on suljettuna.\n\n\n\nHyvää ruokahalua!",
-      "MenusForDays": [
-        {
-          "Date": "2014-08-18T00:00:00",
-          "SetMenus": [
-            {
-              "Name": null,
-              "Price": null,
-              "Components": [
-                "Katkarapu-kookoskastiketta (L ,G ,M ,A)",
-                "Jasminriisiä (L ,G ,M)",
-                "Jauhelihapyöryköitä (L ,M ,A)",
-                "Kermaperunoita (L ,G)",
-                "Täyteläistä mustapippurikastiketta (L ,G ,A)",
-                "Raastepihvejä (L ,M ,* ,A)",
-                "Tomaatti-kikhernehöystöä (L ,G ,M)",
-                "Kikhernekeittoa (L ,G ,M ,Veg ,A)",
-                "Raparperi-kaurapaistosta (L ,M ,A)",
-                "Vaniljakastiketta (G ,VL ,A)",
-                "Take away: Katkarapusalaatti ()",
-                "Ruokasalaatti: Sitrusmarinoituja katkarapuja (A, G, L, M), Raejuustoa (G, L) ()"
-              ]
-            },
-            {
-              "Name": null,
-              "Price": null,
-              "Components": [
-                "Naudanlihawok, chiliä, inkivääriä ja kasviksia (L ,G ,M ,VS ,A)"
-              ]
-            }
-          ]
-        },
-        {
-          "Date": "2014-08-19T00:00:00",
-          "SetMenus": [
-            {
-              "Name": null,
-              "Price": null,
-              "Components": [
-                "Pippurista naudanlihakastiketta (L ,G ,A)",
-                "Keitettyjä perunoita (L ,G ,M ,*)",
-                "Broileri-ananaspannupizzaa (L ,A)",
-                "Valkosipulimurskaa (L ,G ,M ,VS)",
-                "Quorn -pyttipannua (L ,G ,M ,* ,A)",
-                "Täyteläistä sellerisosekeittoa (L ,G ,A)",
-                "Karviaiskiisseliä (L ,G ,M ,Veg)",
-                "Vaniljakermavaahtoa (L ,G ,A)",
-                "Take away: Vuohenjuustosalaatti ()",
-                "Ruokasalaatti: Tandoorimarinoitua broileria (G, L, M), Palvikinkkua (L, M, G) ()"
-              ]
-            },
-            {
-              "Name": null,
-              "Price": null,
-              "Components": [
-                "Porsaan grillipihvi (L ,G ,M)",
-                "Paahdettuja lohkoperunoita (L ,G ,M ,Veg)",
-                "Barbecuekastiketta (L ,G ,M ,Veg)"
-              ]
-            }
-          ]
-        }
-       ]
-    }
-    */
-
     // Models
     var Menu = Backbone.Model.extend();
 
@@ -151,7 +195,7 @@ define([
         model: Menu,
         parse: function(response) {
             //console.log(JSON.stringify(response));
-            return response.MenusForDays;
+            return response.LunchMenus;
         }
     });
 
@@ -218,8 +262,8 @@ define([
 
             _.each(data.SetMenus, function (list) {
                 if (i === 0) {
-                    weekDay = new Date(data.Date).getDayName();
-                    date = moment(data.Date).format("D.M.");
+                    weekDay = data.DayOfWeek;
+                    date = data.Date;
                     i++;
                     this.$el.html(this.template(weekDay));
                     this.$el.html(this.template(date));
@@ -261,33 +305,37 @@ define([
 
     var Router = Backbone.Router.extend({
         routes : {
-            '' : 'showWeekMenu'
+            '' : 'showWeekMenu',
+            'restaurant/:id' : 'showWeekMenu',
+            'restaurant/:id/:lang' : 'showWeekMenu',
         },
         initialize : function() {
         },
 
-        showWeekMenu : function() {
-            //console.log("showWeekMenu");
-            // Instantiating 
-            getMenu();
-        }
-    });
+        showWeekMenu : function(id, lang) {
+            if (id) {
+                restaurantPageId = id;
+            }
+            if (lang) {
+                language = lang;
+                localStorage.setItem("language", language);
+                
+                $(".language-btn:first-child").text(language);
+                $(".language-btn:first-child").val(language);
+            }
 
-    var initialize = function(){
-        var router = new Router();
-        Backbone.history.start();
-    }
-    
-    function getMenu() {
-        this.weekMenuCollection = new WeekMenuCollection();
-        this.weekMenuCollection.url = amica_endpoint;
-        var self = this;
+            this.weekMenuCollection = new WeekMenuCollection();
+            this.weekMenuCollection.url = createAmicaEndpoint();
+            var self = this;
 
-        this.weekMenuCollection.fetch({
-            success: function(response, xhr) {
-                //console.log("success=" + xhr.status);
-                //console.log("response=" + JSON.stringify(response)); // data element only
-                //console.log("xhr=" + JSON.stringify(xhr)); // full response
+            /* Enable when storing week menus to localstorage
+            var restaurantMenu = localStorage.getItem("restaurantMenu." + restaurantPageId);
+            if (restaurantMenu) {
+                console.log("Getting menu from localStorage for id=" + restaurantPageId);
+                //console.log("Menu for id=" + restaurantPageId + "; " + restaurantMenu);
+                restaurantMenu = JSON.parse(restaurantMenu);
+                this.weekMenuCollection.fetch({function(restaurantMenu)) {
+                }
                 self.weekMenuView = new WeekMenuView({
                     model:self.weekMenuCollection
                 });
@@ -297,16 +345,112 @@ define([
                 var weekDayClass = '.'+new Date().getDayName();
                 $('.day').find('.items').hide();
                 $(weekDayClass).find('.items').show();
-            },
-            error: function(response, xhr) {
-                console.log("xhr=" + JSON.stringify(xhr));
-                $('div', this.el).append(response);
+            } else {
+            */
+            console.log("Fetching menu from Amica for id=" + restaurantPageId);
+
+            var weekMenuPromise = this.weekMenuCollection.fetch({
+                success: function(response, xhr) {
+                    //console.log("success=" + xhr.status);
+                    //console.log("response=" + JSON.stringify(response)); // data element only
+                    //console.log("xhr=" + JSON.stringify(xhr)); // full response
+                    //localStorage.setItem("restaurantMenu." + restaurantPageId, JSON.stringify(response));
+
+                    self.weekMenuView = new WeekMenuView({
+                        model:self.weekMenuCollection
+                    });
+                    $('.menus', this.el).html(self.weekMenuView.render().el);
+
+                    // toggle shown week day's menu
+                    var weekDayClass = '.'+new Date().getDayName();
+                    $('.day').find('.items').hide();
+                    $(weekDayClass).find('.items').show();
+                },
+                error: function(response, xhr) {
+                    console.log("xhr=" + JSON.stringify(xhr));
+                    $('div', this.el).append(response);
+                }
+            });
+            //}
+            
+            weekMenuPromise.done(function () { 
+                if (restaurantPageId) {
+                    localStorage.setItem("restaurantPageId", restaurantPageId);
+                    
+                    restaurantsPromise.done(function() {
+                        // Set selected restaurant
+                        $.each(restaurants, function() {
+                            if (restaurantPageId === this.PageLinkId) {
+                                $(".restaurant-btn:first-child").text(this.ShortTitle);
+                                $(".restaurant-btn:first-child").val(this.ShortTitle);
+                                
+                                restaurant = new Restaurant({
+                                    "PageLinkId": this.PageLinkId,
+                                    "ShortTitle": this.ShortTitle,
+                                    "StreetAddress": this.StreetAddress,
+                                    "City": this.City,
+                                    "PostalCode": this.PostalCode
+                                });
+                                restaurantView = new RestaurantView({ model: restaurant });
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+    var initialize = function(){
+        var router = new Router();
+        Backbone.history.start();
+    }
+    
+    function getRestaurants() {
+        var deferred = $.Deferred();
+        
+        var restaurantsJson = localStorage.getItem("restaurants");
+        if (restaurantsJson) {
+            var restaurants = JSON.parse(restaurantsJson);
+            console.log("Reading restaurants from localStorage, found " + restaurants.length);
+            deferred.resolve(true, restaurants);
+            return deferred.promise();
+        }
+        
+        var req = new XMLHttpRequest;
+        req.open("GET", amica_restaurant_endpoint);
+        req.onreadystatechange = function() {
+            if (req.readyState === XMLHttpRequest.DONE) {
+                if (req.status == 200 ) {
+                    //console.debug("200: " + req.responseText);
+                    var jsonObject = JSON.parse(req.responseText);
+                    restaurants = filterRestaurants(jsonObject);
+                    deferred.resolve(false, restaurants);
+                } else {
+                    deferred.reject(req.status, req.responseText);
+                }
             }
-        });
+        }
+
+        req.send();
+        
+        return deferred.promise();
     }
     
     return {
         initialize: initialize
     };
+    
+    function filterRestaurants(data) {
+        // Response contains all kinds of data so we filter it to have only restaurants.
+        var restaurants = data.Hits.filter(function (row) {
+            if(row.Type === "restaurant") {
+                return true
+            } else {
+                return false;
+            }
+        });
+
+        return restaurants;
+    }
 });
 
