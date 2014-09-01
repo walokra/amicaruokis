@@ -87,8 +87,8 @@ define([
     ul.appendTo(".json-lang-menu");
     buildUL(ul, source);
     if ($(".json-lang-menu>li:has(ul.js-menu)")) {
-        $(".language-btn:first-child").text(language);
-        $(".language-btn:first-child").val(language);
+        $(".language-btn .item").text(language);
+        $(".language-btn .item").val(language);
     }
     // Language menu
     
@@ -130,8 +130,8 @@ define([
         buildUL(ul, source);
         //add bootstrap classes
         if ($(".json-menu>li:has(ul.js-menu)")) {
-            $(".restaurant-btn:first-child").text(restaurants[0].ShortTitle);
-            $(".restaurant-btn:first-child").val(restaurants[0].ShortTitle);
+            $(".restaurant-btn .item").text(restaurants[0].ShortTitle);
+            $(".restaurant-btn .item").val(restaurants[0].ShortTitle);
         }
     });
 
@@ -155,15 +155,18 @@ define([
     */
     $('.getMenu').click(function(e) {
         restaurantPageId=$('#restaurant #restaurantPageId').val();
-        url = "restaurant/" + restaurantPageId
+        url = _.escape("restaurant/" + restaurantPageId);
         router.navigate(url, {trigger: true});
     });
     
+    /* With datetimepicker dropdowns
     function getMonday() {
         var d = moment().startOf('isoWeek').format("YYYY-MM-DD");
         return d;
     }
+    */
 
+    /*
     (function() {
         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
         Date.prototype.getDayName = function() {
@@ -173,6 +176,7 @@ define([
         //    return this.charAt(0).toUpperCase() + this.slice(1);
         //};
     })();
+    */
     
     function capitalize(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -189,7 +193,6 @@ define([
     var WeekMenuCollection = Backbone.Collection.extend({
         model: Menu,
         parse: function(response) {
-            //console.log(JSON.stringify(response));
             return response.LunchMenus;
         }
     });
@@ -221,23 +224,20 @@ define([
         },
 
         events: {
-            'click .day' :'toggleEvent'
+            'click .day .toggle' :'toggleEvent'
         },
         toggleEvent: function (e) {
             //console.log(e.currentTarget.className);
-            $(e.currentTarget).find('.items').toggle("", function() {});
+            $(e.currentTarget).parent().find('.items').toggle(100, function() {});
         },
 
         render:function (event) {
             this.$el.empty(); // we don't want any old stuff there if we render this multiple times.
-            //loop through each model, and render them separately
             _.each(this.model.models, this.renderOne, this);
 
             return this;
         },
         renderOne : function(data) {
-            //console.log(JSON.stringify(data))
-            // init the ImageView and passed in its model here
             var attributes = data.toJSON();
             var date = attributes.Date;
             data.date = date;
@@ -261,14 +261,10 @@ define([
         template:_.template($('#tpl-day').html()),
 
         render : function() {
-            //console.log("render=" + JSON.stringify(this.model.toJSON()));
-            //loop through each model, and render them separately
             _.each(this.model, this.renderOne, this);
             return this;
         },
         renderOne : function(data) {
-            //console.log("renderOne=" + JSON.stringify(data))
-
             _.each(data.SetMenus, function (list) {
                 // Adding the weekday only once
                 if (i === 0) {
@@ -298,7 +294,6 @@ define([
         template:_.template($('#tpl-menus').html()),
 
         render : function() {
-            //console.log("ComponentView: " + JSON.stringify(this.model));
             var comps = this.model.Components;
             this.$el.html(this.template(this.model));
 
@@ -326,12 +321,12 @@ define([
             if (id) {
                 restaurantPageId = id;
             }
-            if (lang) {
+            if (lang && (lang === "en" || lang === "fi")) {
                 language = lang;
                 localStorage.setItem("language", language);
-                
-                $(".language-btn:first-child").text(language);
-                $(".language-btn:first-child").val(language);
+
+                $(".language-btn .item").text(language);
+                $(".language-btn .item").val(language);
             }
 
             this.weekMenuCollection = new WeekMenuCollection();
@@ -357,6 +352,7 @@ define([
                 $(weekDayClass).find('.items').show();
             } else {
             */
+            
             console.log("Fetching menu from Amica for id=" + restaurantPageId);
 
             var weekMenuPromise = this.weekMenuCollection.fetch({
@@ -392,8 +388,8 @@ define([
                         // Set selected restaurant
                         $.each(restaurants, function() {
                             if (restaurantPageId === this.PageLinkId) {
-                                $(".restaurant-btn:first-child").text(this.ShortTitle);
-                                $(".restaurant-btn:first-child").val(this.ShortTitle);
+                                $(".restaurant-btn .item").text(this.ShortTitle);
+                                $(".restaurant-btn .item").val(this.ShortTitle);
                                 
                                 restaurant = new Restaurant({
                                     "PageLinkId": this.PageLinkId,

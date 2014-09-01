@@ -9,37 +9,33 @@
         <!-- Bootstrap -->
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+        <!--<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />-->
 
         <link rel="stylesheet" href="css/styles.css">
         <!-- Load the script "js/main.js" as our entry point -->
         <script data-main="js/main" src="js/libs/require.js"></script>
-        <style type="text/css">
-            .day {
-                cursor: pointer;
-            }
-        </style>
     </head>
 	<body>
         <div class="header">
 
         </div>
         
-        <div class="content">
+        <div class="container-fluid">
             <div class="row">
+                <div class="col-xs-1 dropdown language">
+                    <button class="language-btn btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <span class="item">language</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="language-dropdown-menu dropdown-menu json-lang-menu"></ul>
+                </div>
                 
-                <div class="col-sm-1 dropdown restaurants">
+                <div class="col-xs-2 dropdown restaurants">
                     <button class="restaurant-btn btn btn-default dropdown-toggle" type="button" id="dropdownMenuRestaurants" data-toggle="dropdown">
+                        <span class="item">restaurant</span>
                         <span class="caret"></span>
                     </button>
                     <ul class="restaurant-dropdown-menu dropdown-menu json-menu scrollable-menu"></ul>
-                </div>
-                
-                <div class="col-sm-1 dropdown language">
-                  <button class="language-btn btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                      <span class="caret"></span>
-                  </button>
-                  <ul class="language-dropdown-menu dropdown-menu json-lang-menu"></ul>
                 </div>
                 
                 <!-- Useless for now
@@ -52,12 +48,15 @@
                 </div>
                 -->
 
-                <div class='col-sm-2'>
-                    <div class='input-group restaurant' id='restaurant'>
-                        <input type='text' id="restaurantPageId" title="Ravintolan numerokoodi" placeholder="Ravintolan koodi" class="form-control" />
+                <div class="col-xs-2">
+                    <div class="input-group restaurant" id="restaurant">
+                        <input type="text" id="restaurantPageId" title="Ravintolan numerokoodi" placeholder="Ravintolakoodi" class="form-control" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default getMenu">Hae</button>
+                        </span>
                     </div>
                 </div>
-                <button type="button" class="btn btn-default getMenu">Hae</button>
+                
             </div>
 
             <div class="row">
@@ -65,13 +64,17 @@
             </div>
         </div>
         
+        <div class="footer">
+            Tehnyt <a href="https://twitter.com/walokra">@walokra</a>, data: <a href="http://www.amica.fi">Amica</a>. Sivusto ei ole mitenkään sidoksissa Amicaan.
+        </div>
+        
         <script type="text/template" id="tpl-header">
-            <h1 class="title"><a href="index.html">Amicaruokis - <%= ShortTitle %></%></a></h1>
-            <h4><%= StreetAddress %>, <%= PostalCode %> <%= City %></h4>
+            <h1><a href="index.html">Amicaruokis - <%= ShortTitle %></%></a></h1>
+            <p><%= StreetAddress %>, <%= PostalCode %> <%= City %></p>
         </script>
         
         <script type="text/template" id="tpl-day">
-            <h3 class="title"><%= weekDay %> (<%= date %>)</h3>
+            <h3 class="title toggle"><%= weekDay %> (<%= date %>)</h3>
         </script>
             
         <!-- Templates -->            
