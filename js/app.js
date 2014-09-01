@@ -7,10 +7,14 @@ define([
     'datetimepicker',
     'json2'
 ], function($, _, Backbone, moment){
+    var router;
+    
+    /* Not used for now
     $('#datetimepicker1').datetimepicker({
         language: 'fi',
         defaultDate: getMonday(),
     });
+    */
     
     $('.dropdown-toggle').dropdown();
     
@@ -33,60 +37,35 @@ define([
     */
     
     //localStorage.clear();
-    
-    //var amica_endpoint_root = 'http://www.amica.fi/modules/json/json/Index?';
-    //var costNumber='3238';
-    //var firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
-    //var lastDay=moment($('#datetimepicker2').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
-    //var amica_endpoint = amica_endpoint_root + 'costNumber=' + costNumber + '&firstDay=' + firstDay + '&lastDay=' + lastDay + '&language=' + language;
-    // http://www.amica.fi/api/restaurant/menu/week?language=fi&restaurantPageId=7303&weekDate=2014-8-30
+
     var amica_endpoint_root = 'http://www.amica.fi/api/restaurant/menu/week?';
     var restaurantPageId = localStorage.getItem("restaurantPageId");
     if (!restaurantPageId) {
-        restaurantPageId = "7256";
+        restaurantPageId = "5830";
     }
     var restaurant = localStorage.getItem("restaurant");
     if (!restaurant) {
-        restaurant = "Itämeri";
+        restaurant = "Piikeidas";
     }
-    /*
-    var template = _.template($('#tpl-header').html(), {restaurant: "restaurant"});
-    $('.header').html(template);
-    */
     
-    var Restaurant = Backbone.Model.extend({
-        defaults: {
-            PageLinkId: "7256",
-            ShortTitle: 'Itämeri',
-            StreetAddress: "Itämerenkatu 3",
-            City: "Helsinki",
-            PostalCode: "00180"
-            // MainText
-            // Url
-        }
-    });
+    var piikeidas = {
+        PageLinkId: "5830",
+        ShortTitle: 'Piikeidas',
+        StreetAddress: "Karvaamokuja 2",
+        City: "Helsinki",
+        PostalCode: "00380",
+        // MainText
+        Url: "http://www.amica.fi/ravintolat/ei-avoimet-ravintolat/piikeidas/"
+    };
     
-    var RestaurantView = Backbone.View.extend({
-        el: '.header',
-
-        initialize:function(){
-            this.render();
-        },
-        template:_.template($('#tpl-header').html()),
-        
-        render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
-        }
-    });
-    var restaurant = new Restaurant;
-    var restaurantView = new RestaurantView({ model: restaurant });
-    
-    var weekDate = firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    //var weekDate = firstDay=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
+    var weekDate = moment().format('YYYY-MM-DD');
     var language = localStorage.getItem("language");
     if (!language) {
         language = "fi";
     }
     var amica_endpoint = createAmicaEndpoint();
+    // END variables
     
     // Build lang dropdown
     var builddata = function () {
@@ -107,7 +86,6 @@ define([
     var ul = $(".json-lang-menu");
     ul.appendTo(".json-lang-menu");
     buildUL(ul, source);
-    //add bootstrap classes
     if ($(".json-lang-menu>li:has(ul.js-menu)")) {
         $(".language-btn:first-child").text(language);
         $(".language-btn:first-child").val(language);
@@ -124,8 +102,8 @@ define([
             console.log("Fetching restaurants from Amica, found " + data.length)
         }
         restaurants = data;
-                    
-        //console.log("response=" + JSON.stringify(response));
+        // Adding our hidden restaurant
+        restaurants.push(piikeidas);
         
         var builddata = function () {
             var items = [];
@@ -135,6 +113,7 @@ define([
                 var PageLinkId = item["PageLinkId"];
                 items[i] = { label: ShortTitle, id: PageLinkId };
             }
+            
             return items;
         }
 
@@ -164,15 +143,20 @@ define([
         return amica_endpoint_root + 'restaurantPageId=' + restaurantPageId + '&weekDate=' + weekDate + '&language=' + language;
     }
     
-    // http://www.amica.fi/modules/json/json/Index?costNumber=3238&firstDay=2014-08-18&lastDay=2014-08-24&language=fi
-    
+    /* Useless for now
     // Action for getting menu for given time period
-    $('.getMenu').click(function() {
+    $('.getMenu').click(function(e) {
         weekDate=moment($('#datetimepicker1').data("DateTimePicker").getDate()).format('YYYY-MM-DD');
         // TODO:
         // Rajapinta ei tarjoa historiaa ruokalistoista.
         // Tallenna viikottaiset ruokalistat tietokantaan ja hae vanhemmat listat sieltä
         amica_endpoint = createAmicaEndpoint();
+    });
+    */
+    $('.getMenu').click(function(e) {
+        restaurantPageId=$('#restaurant #restaurantPageId').val();
+        url = "restaurant/" + restaurantPageId
+        router.navigate(url, {trigger: true});
     });
     
     function getMonday() {
@@ -185,11 +169,22 @@ define([
         Date.prototype.getDayName = function() {
             return days[ this.getDay() ];
         };
+        //String.prototype.capitalize = function() {
+        //    return this.charAt(0).toUpperCase() + this.slice(1);
+        //};
     })();
+    
+    function capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
     // Models
     var Menu = Backbone.Model.extend();
 
+    var Restaurant = Backbone.Model.extend({
+        defaults: piikeidas
+    });
+    
     // Collection of menus. 
     var WeekMenuCollection = Backbone.Collection.extend({
         model: Menu,
@@ -203,6 +198,21 @@ define([
     // Views
     //
 
+    var RestaurantView = Backbone.View.extend({
+        el: '.header',
+
+        initialize:function(){
+            this.render();
+        },
+        template:_.template($('#tpl-header').html()),
+        
+        render: function () {
+            this.$el.html(this.template(this.model.toJSON()));
+        }
+    });
+    var restaurant = new Restaurant;
+    var restaurantView = new RestaurantView({ model: restaurant });
+    
     // Default eventsview for events collection's view
     var WeekMenuView = Backbone.View.extend({
         tagName : 'div',
@@ -241,7 +251,6 @@ define([
 
 
     var i=0;
-
     var WeekMenuItemView = Backbone.View.extend({
         tagName  : 'div',
 
@@ -261,6 +270,7 @@ define([
             //console.log("renderOne=" + JSON.stringify(data))
 
             _.each(data.SetMenus, function (list) {
+                // Adding the weekday only once
                 if (i === 0) {
                     weekDay = data.DayOfWeek;
                     date = data.Date;
@@ -362,7 +372,8 @@ define([
                     $('.menus', this.el).html(self.weekMenuView.render().el);
 
                     // toggle shown week day's menu
-                    var weekDayClass = '.'+new Date().getDayName();
+                    var weekDayClass = moment().format("dddd");
+                    weekDayClass = '.' + capitalize(weekDayClass);
                     $('.day').find('.items').hide();
                     $(weekDayClass).find('.items').show();
                 },
@@ -401,7 +412,7 @@ define([
     });
 
     var initialize = function(){
-        var router = new Router();
+        router = new Router();
         Backbone.history.start();
     }
     
@@ -452,5 +463,6 @@ define([
 
         return restaurants;
     }
+
 });
 
