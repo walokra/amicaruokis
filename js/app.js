@@ -93,7 +93,7 @@ define([
     // Language menu
     
     // Get list of restaurants from Amica API
-    var amica_restaurant_endpoint = "http://www.amica.fi/api/search/FindSearchResults/" + language + "?page=1&pageSize=200&query=&tagId=4527,4287"
+    var amica_restaurant_endpoint = "http://www.amica.fi/api/search/FindSearchResults?language=" + language + "&page=1&pageSize=200&query=&tagId=4527,4287"
     var restaurantsPromise = getRestaurants();
     
     restaurantsPromise.done(function(found, data){
@@ -104,7 +104,10 @@ define([
         restaurants = data;
         // Adding our hidden restaurant
         restaurants.push(piikeidas);
-        
+       
+		// Creating array of restaurants
+		// ShortTitle = Restaurant name e.g. Piikeidas
+		// PageLinkId = Restaurant code to be used in amica site, e.g. 5830
         var builddata = function () {
             var items = [];
             for (i = 0; i < restaurants.length; i++) {
@@ -201,6 +204,7 @@ define([
     // Views
     //
 
+	// Render restaurant info
     var RestaurantView = Backbone.View.extend({
         el: '.header',
 
@@ -210,6 +214,7 @@ define([
         template:_.template($('#tpl-header').html()),
         
         render: function () {
+			//console.log("json=", JSON.stringify(this.model.toJSON()));
             this.$el.html(this.template(this.model.toJSON()));
         }
     });
@@ -238,9 +243,11 @@ define([
             return this;
         },
         renderOne : function(data) {
+			//console.log("data=", JSON.stringify(data.toJSON()));
             var attributes = data.toJSON();
             var date = attributes.Date;
             data.date = date;
+			//console.log("date=", date);
 
             var view = new WeekMenuItemView({
                 model : data
@@ -261,30 +268,23 @@ define([
         template:_.template($('#tpl-day').html()),
 
         render : function() {
-            _.each(this.model, this.renderOne, this);
-            return this;
-        },
-        renderOne : function(data) {
-            _.each(data.SetMenus, function (list) {
-                // Adding the weekday only once
-                if (i === 0) {
-                    weekDay = data.DayOfWeek;
-                    date = data.Date;
-                    i++;
-                    this.$el.html(this.template(weekDay));
-                    this.$el.html(this.template(date));
-                    $(this.el).addClass(weekDay).addClass('day').html(); 
-                }
+			//console.log("model=", JSON.stringify(this.model));
+			var data = this.model.toJSON();
+            weekDay = data.DayOfWeek;
+			date = data.Date;
+			this.$el.html(this.template(weekDay));
+			this.$el.html(this.template(date));
+			$(this.el).addClass(weekDay).addClass('day').html();
+			//console.log("weekDay=", weekDay, "; date=", date);
 
-                $(this.el).append(new ComponentView({model:list}).render().el);
-            }, this);
-            i=0;
+			//console.log("model=", JSON.stringify(this.model));
+			$(this.el).append(new ComponentView({model:data}).render().el);
 
             return this;
         }
     });
-
-    var ComponentView = Backbone.View.extend({
+   
+	var ComponentView = Backbone.View.extend({
         className  : 'items',
 
         initialize : function() {
@@ -300,8 +300,7 @@ define([
             return this;
         }
     });
-    
-    
+
     //
     // Fetching gallery data from REST API
     //
