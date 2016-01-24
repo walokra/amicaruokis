@@ -1,0 +1,13 @@
+<!-- Templates -->
+<script type="text/template" id="tpl-day">
+	<h3 class="title"><%= weekDay %> (<%= date %>)</h3>
+</script>
+
+<script type="text/template" id="tpl-menus">
+	<ul>
+	<% for(var item in Components) { %>
+		<% //console.log(Components[item]); %>
+		<li><%= Components[item] %></li>
+	<% } %>
+	</ul>
+</script>
